@@ -21,7 +21,7 @@ body:
     id: versions
     attributes:
       label: Versions
-      placeholder: Oracle APEX ECharts 1.0.0, APEX 24.2, database 26ai, browser version
+      placeholder: Oracle APEX ECharts 1.0.1, APEX 24.2, database 26ai, browser version
     validations:
       required: true
   - type: textarea

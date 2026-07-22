@@ -177,6 +177,11 @@ def run_git(arguments: list[str], cwd: Path) -> str:
     return completed.stdout.strip()
 
 
+def resolve_fetched_commit(checkout: Path) -> str:
+    """Resolve FETCH_HEAD to its commit, including when it is an annotated tag."""
+    return validate_commit(run_git(["rev-parse", "FETCH_HEAD^{commit}"], checkout))
+
+
 @contextmanager
 def fetched_snapshot(repository: str, source_path: str, ref: str) -> Iterator[tuple[Path, str]]:
     if not ref or ref.startswith("-") or any(char.isspace() for char in ref):
@@ -189,7 +194,7 @@ def fetched_snapshot(repository: str, source_path: str, ref: str) -> Iterator[tu
         run_git(["init", "--quiet"], checkout)
         run_git(["remote", "add", "origin", repository_url(repository)], checkout)
         run_git(["fetch", "--quiet", "--depth", "1", "origin", ref], checkout)
-        commit = validate_commit(run_git(["rev-parse", "FETCH_HEAD"], checkout))
+        commit = resolve_fetched_commit(checkout)
         run_git(["checkout", "--quiet", "--detach", "FETCH_HEAD"], checkout)
         source = checkout / source_path
         tree_hashes(source)
