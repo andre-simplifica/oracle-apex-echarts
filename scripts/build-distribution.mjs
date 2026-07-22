@@ -38,7 +38,11 @@ async function normalize(directory) {
 }
 
 async function zip(directory, output, entries) {
-  const result = spawnSync("zip", ["-X", "-9", output, ...entries], { cwd: directory, encoding: "utf8" });
+  const result = spawnSync("zip", ["-X", "-9", output, ...entries], {
+    cwd: directory,
+    encoding: "utf8",
+    env: { ...process.env, TZ: "UTC" }
+  });
   if (result.status !== 0) throw new Error(`zip failed: ${result.stderr || result.stdout}`);
   const check = spawnSync("unzip", ["-t", output], { encoding: "utf8" });
   if (check.status !== 0) throw new Error(`ZIP integrity failed: ${check.stderr || check.stdout}`);
