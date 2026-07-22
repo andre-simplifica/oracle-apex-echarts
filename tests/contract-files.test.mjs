@@ -139,6 +139,8 @@ describe("repository contracts", () => {
     assert.match(installer, /USER_ERRORS/i);
     assert.match(installer, /apex_appl_plugin_files/i);
     assert.match(installer, /Downgrade blocked/);
+    assert.match(installer, /select workspace_id, workspace, owner\s+into/i);
+    assert.doesNotMatch(installer, /select workspace_id, workspace, parsing_schema/i);
     assert.match(installer, /exit success/);
     assert.match(validator, /exit success/);
     assert.doesNotMatch(installer, /create_page|create_region|apex export|accept\s|pause\s/i);
@@ -149,6 +151,8 @@ describe("repository contracts", () => {
     assert.match(audit, /INCOMPATIBLE_OR_PARTIAL/);
     assert.match(audit, /echarts-6\.1\.0\.min\.js/);
     assert.match(audit, /l_expected_file_count = 8/);
+    assert.match(audit, /select count\(\*\), max\(workspace\), max\(owner\)/i);
+    assert.doesNotMatch(audit, /max\(parsing_schema\)/i);
     assert.doesNotMatch(audit, /execute\s+immediate|create\s+|alter\s+|drop\s+|insert\s+|update\s+|delete\s+|merge\s+|commit\s*;/i);
   });
 

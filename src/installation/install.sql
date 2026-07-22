@@ -38,7 +38,7 @@ declare
 begin
   l_application_id := to_number('&&TARGET_APP_ID');
 
-  select workspace_id, workspace, parsing_schema
+  select workspace_id, workspace, owner
     into l_workspace_id, l_workspace_name, l_parsing_schema
     from apex_applications
    where application_id = l_application_id;
