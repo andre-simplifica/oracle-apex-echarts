@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0",
+  "id": "synthetic_donut",
+  "requiredRuntime": ">=1.0.0 <2.0.0",
+  "preset": "donut",
+  "accessibility": {"description": "Synthetic status composition as a donut.", "fallbackText": "Completed 72, pending 28.", "emptyText": "No statuses."},
+  "data": {"mode": "inline", "contract": "option", "option": {"series": [{"name": "Status", "type": "pie", "radius": ["45%", "72%"], "data": [{"name": "Completed", "value": 72}, {"name": "Pending", "value": 28}]}]}}
+}

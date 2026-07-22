@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0",
+  "id": "synthetic_no_data",
+  "requiredRuntime": ">=1.0.0 <2.0.0",
+  "preset": "bar_vertical",
+  "accessibility": {"description": "Synthetic empty chart.", "fallbackText": "No data is available.", "emptyText": "No data is available."},
+  "data": {"mode": "inline", "contract": "option", "option": {"xAxis": {"type": "category"}, "yAxis": {"type": "value"}, "series": []}}
+}

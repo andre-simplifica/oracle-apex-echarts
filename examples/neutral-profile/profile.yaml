@@ -1,0 +1,38 @@
+schemaVersion: "1.0"
+project:
+  name: "Synthetic Operations"
+  locale: "en-US"
+  timeZone: "UTC"
+visual:
+  provider: "auto"
+  brandReportKit:
+    profilePath: ".apex-brand-report-kit/brand-profile.json"
+  fallback: "neutral"
+  overrides:
+    palette: []
+    fontFamily: null
+    background: "transparent"
+charts:
+  preferredType: "bar"
+  preferencePolicy: "prefer"
+  allowedTypes: [bar, line, area, combo, pie, donut, gauge, scatter]
+integration:
+  defaultMode: "auto"
+behavior:
+  renderer: "canvas"
+  downloadPolicy: "never"
+  animation: "auto"
+  labels: "auto"
+  legendPosition: "bottom"
+responsive:
+  breakpoints: [360, 390, 768, 1280, 1440]
+  minHeight: 320
+limits:
+  inlinePayloadWarningBytes: 256000
+  pointsWarning: 2000
+  maxPayloadBytes: 2097152
+  maxOptionDepth: 16
+  maxOptionKeys: 5000
+messages:
+  empty: "No data is available for this chart."
+  error: "The chart could not be displayed."

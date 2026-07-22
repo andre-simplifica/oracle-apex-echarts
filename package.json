@@ -1,0 +1,39 @@
+{
+  "name": "@andre-simplifica/oracle-apex-echarts",
+  "version": "1.0.0",
+  "description": "Self-contained Apache ECharts runtime, Oracle APEX plug-in, PL/SQL API, and reusable agent skill.",
+  "type": "module",
+  "private": false,
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andre-simplifica/oracle-apex-echarts.git"
+  },
+  "engines": {
+    "node": ">=24 <25",
+    "npm": ">=11 <12"
+  },
+  "scripts": {
+    "lint": "node scripts/lint.mjs",
+    "test": "node --test --test-reporter=spec tests/*.test.mjs",
+    "validate:schemas": "node scripts/validate-schemas.mjs",
+    "validate:profile": "node scripts/validate-profile.mjs",
+    "validate:skill": "node scripts/validate-skill.mjs",
+    "scan:sensitive": "node scripts/scan-sensitive.mjs",
+    "licenses:check": "node scripts/check-licenses.mjs",
+    "build:plugin": "node scripts/build-plugin.mjs",
+    "build:skill": "node scripts/sync-skill-assets.mjs",
+    "build:dist": "node scripts/build-distribution.mjs",
+    "build": "npm run build:plugin && npm run build:skill && npm run build:dist",
+    "check:dist": "node scripts/check-dist.mjs",
+    "validate:all": "npm run lint && npm run validate:schemas && npm run validate:skill && npm run test && npm run build && npm run check:dist && npm run licenses:check && npm run scan:sensitive",
+    "upstream:check": "node scripts/upstream.mjs check",
+    "upstream:update": "node scripts/upstream.mjs update"
+  },
+  "devDependencies": {
+    "ajv": "8.17.1",
+    "ajv-formats": "3.0.1",
+    "openpgp": "6.3.1",
+    "yaml": "2.8.1"
+  }
+}

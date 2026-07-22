@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oracle APEX ECharts synthetic dashboard</title>
+  <link rel="stylesheet" href="../../src/css/oracle-apex-echarts.css">
+  <style>body{font:16px/1.5 system-ui;margin:0;padding:24px;background:#f6f8fb;color:#172033}.layout{max-width:960px;margin:auto}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}.card,.panel{background:#fff;border:1px solid #d8deea;border-radius:14px;padding:16px}.panel{margin-top:16px}table{width:100%;border-collapse:collapse}th,td{padding:8px;text-align:left;border-bottom:1px solid #d8deea}</style>
+</head>
+<body>
+  <main class="layout">
+    <h1>Synthetic operations snapshot</h1>
+    <section class="cards" aria-label="Key indicators"><article class="card"><strong>397</strong><br>Orders</article><article class="card"><strong>92%</strong><br>Service level</article><article class="card"><strong>35 ms</strong><br>Response time</article></section>
+    <section class="panel">
+      <div id="synthetic_dashboard_chart" class="oracle-apex-echarts" data-oracle-apex-echarts="1" data-oae-state="loading" data-oae-spec-id="synthetic_dashboard_chart__spec">
+        <div class="oracle-apex-echarts__canvas" tabindex="0" aria-label="Synthetic orders by month."></div>
+        <div class="oracle-apex-echarts__status" role="status" aria-live="polite">Loading chart</div>
+        <p class="oracle-apex-echarts__fallback" role="alert" hidden>The chart could not be displayed.</p>
+      </div>
+      <script id="synthetic_dashboard_chart__spec" type="application/json">{"schemaVersion":"1.0","id":"synthetic_dashboard_chart","requiredRuntime":">=1.0.0 <2.0.0","preset":"bar_vertical","accessibility":{"description":"Synthetic orders by month.","fallbackText":"Use the table below.","emptyText":"No orders."},"data":{"mode":"inline","contract":"option","option":{"xAxis":{"type":"category"},"yAxis":{"type":"value"},"series":[{"name":"Orders","type":"bar","data":[["Jan",120],["Feb",145],["Mar",132]]}]}}}</script>
+      <table><caption>Orders by month</caption><thead><tr><th>Month</th><th>Orders</th></tr></thead><tbody><tr><td>Jan</td><td>120</td></tr><tr><td>Feb</td><td>145</td></tr><tr><td>Mar</td><td>132</td></tr></tbody></table>
+    </section>
+  </main>
+  <script src="../../vendor/echarts/echarts-6.1.0.min.js"></script>
+  <script src="../../src/js/oracle-apex-echarts.js"></script>
+  <script>window.OracleApexECharts.configure({projectProfile:{project:{locale:"en-US",timeZone:"UTC"},visual:{resolvedTokens:{palette:["#2563EB","#0F766E"],background:"transparent"}},charts:{allowedTypes:["bar","line","area","combo","pie","donut","gauge","scatter"]},behavior:{renderer:"canvas",downloadPolicy:"never",animation:"auto",labels:"auto",legendPosition:"bottom"},responsive:{minHeight:320,breakpoints:[360,768]},limits:{inlinePayloadWarningBytes:256000,pointsWarning:2000,maxPayloadBytes:2097152,maxOptionDepth:16,maxOptionKeys:5000}}});window.OracleApexECharts.bootstrap();</script>
+</body>
+</html>

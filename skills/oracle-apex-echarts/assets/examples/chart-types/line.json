@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0",
+  "id": "synthetic_line",
+  "requiredRuntime": ">=1.0.0 <2.0.0",
+  "preset": "line",
+  "accessibility": {"description": "Synthetic response time trend.", "fallbackText": "Response time: 42, 38, and 35 milliseconds.", "emptyText": "No samples."},
+  "data": {"mode": "inline", "contract": "option", "option": {"xAxis": {"type": "category"}, "yAxis": {"type": "value"}, "series": [{"name": "Milliseconds", "type": "line", "data": [["10:00", 42], ["11:00", 38], ["12:00", 35]]}]}}
+}

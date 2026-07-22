@@ -1,0 +1,37 @@
+schemaVersion: "1.0"
+project:
+  name: "Acme Harbor synthetic report"
+  locale: "en-US"
+  timeZone: "UTC"
+visual:
+  provider: "oracle-apex-brand-report-kit"
+  brandReportKit:
+    profilePath: ".apex-brand-report-kit/brand-profile.json"
+  fallback: "neutral"
+  overrides:
+    palette: []
+    background: "transparent"
+charts:
+  preferredType: "bar"
+  preferencePolicy: "prefer"
+  allowedTypes: [bar, line, area, combo, pie, donut, gauge, scatter]
+integration:
+  defaultMode: "dynamic-content"
+behavior:
+  renderer: "canvas"
+  downloadPolicy: "never"
+  animation: "auto"
+  labels: "auto"
+  legendPosition: "bottom"
+responsive:
+  breakpoints: [480, 768, 1024]
+  minHeight: 320
+limits:
+  inlinePayloadWarningBytes: 256000
+  pointsWarning: 2000
+  maxPayloadBytes: 2097152
+  maxOptionDepth: 16
+  maxOptionKeys: 5000
+messages:
+  empty: "No data is available."
+  error: "The chart could not be displayed."

@@ -1,0 +1,27 @@
+name: New Apache ECharts version
+description: Track review of a stable upstream release without automatic vendoring.
+title: "[Upstream]: Apache ECharts "
+labels: [upstream-echarts]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Stable version
+      placeholder: 6.2.0
+    validations:
+      required: true
+  - type: textarea
+    id: official
+    attributes:
+      label: Official sources
+      description: Link the Apache distribution, apache/echarts tag or release, changelog, and official npm package.
+    validations:
+      required: true
+  - type: checkboxes
+    id: review
+    attributes:
+      label: Required review
+      options:
+        - label: Source archive, checksum filename, SHA-512, and signature were verified.
+        - label: npm SRI and vendored bundle SHA-256 were verified.
+        - label: Allowlist, security, lifecycle, licenses, compatibility, and rollback were reviewed.

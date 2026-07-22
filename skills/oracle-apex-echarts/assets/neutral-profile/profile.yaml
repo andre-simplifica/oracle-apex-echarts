@@ -1,0 +1,51 @@
+schemaVersion: "1.0"
+project:
+  name: "Neutral Oracle APEX project"
+  locale: "en-US"
+  timeZone: "UTC"
+visual:
+  provider: "neutral"
+  fallback: "neutral"
+  overrides:
+    palette:
+      - "#2563EB"
+      - "#0F766E"
+      - "#7C3AED"
+      - "#D97706"
+      - "#DC2626"
+      - "#0891B2"
+    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    background: "transparent"
+    surface: "#FFFFFF"
+    textColor: "#172033"
+    mutedColor: "#526079"
+    lineColor: "#AAB4C5"
+    borderColor: "#D8DEEA"
+    breakpoints: [360, 390, 768, 1280, 1440]
+    reducedMotion: true
+    minimumContrast: 4.5
+charts:
+  preferredType: "bar"
+  preferencePolicy: "prefer"
+  allowedTypes: [bar, line, area, combo, pie, donut, gauge, scatter]
+integration:
+  defaultMode: "auto"
+behavior:
+  renderer: "canvas"
+  downloadPolicy: "never"
+  animation: "auto"
+  labels: "auto"
+  legendPosition: "bottom"
+responsive:
+  breakpoints: [360, 390, 768, 1280, 1440]
+  minHeight: 320
+  hideLegendBelow: 0
+limits:
+  inlinePayloadWarningBytes: 256000
+  pointsWarning: 2000
+  maxPayloadBytes: 2097152
+  maxOptionDepth: 16
+  maxOptionKeys: 5000
+messages:
+  empty: "No data is available for this chart."
+  error: "The chart could not be displayed."

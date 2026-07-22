@@ -1,0 +1,108 @@
+.oracle-apex-echarts {
+  --oae-background: transparent;
+  --oae-border: rgba(15, 23, 42, 0.12);
+  --oae-error-background: #fff7ed;
+  --oae-error-border: #fdba74;
+  --oae-error-color: #9a3412;
+  --oae-loading-color: #475569;
+  box-sizing: border-box;
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  position: relative;
+}
+
+.oracle-apex-echarts,
+.oracle-apex-echarts * {
+  box-sizing: border-box;
+}
+
+.oracle-apex-echarts__canvas {
+  background: var(--oae-background);
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-block-size: var(--oae-min-height, 320px);
+  min-inline-size: 0;
+  outline: none;
+  touch-action: manipulation;
+}
+
+.oracle-apex-echarts__canvas:focus-visible {
+  border-radius: 8px;
+  outline: 3px solid color-mix(in srgb, currentColor 42%, transparent);
+  outline-offset: 3px;
+}
+
+.oracle-apex-echarts__status {
+  align-items: center;
+  background: color-mix(in srgb, var(--oae-background) 84%, white);
+  color: var(--oae-loading-color);
+  display: none;
+  font: 600 0.875rem/1.45 ui-sans-serif, system-ui, sans-serif;
+  gap: 0.625rem;
+  inset: 0;
+  justify-content: center;
+  min-block-size: 180px;
+  padding: 1rem;
+  position: absolute;
+  text-align: center;
+  z-index: 2;
+}
+
+.oracle-apex-echarts__status::before {
+  animation: oae-spin 0.8s linear infinite;
+  border: 3px solid color-mix(in srgb, currentColor 22%, transparent);
+  border-radius: 999px;
+  border-top-color: currentColor;
+  content: "";
+  block-size: 1.25rem;
+  inline-size: 1.25rem;
+}
+
+.oracle-apex-echarts[data-oae-state="loading"] .oracle-apex-echarts__status {
+  display: flex;
+}
+
+.oracle-apex-echarts__fallback {
+  background: var(--oae-error-background);
+  border: 1px solid var(--oae-error-border);
+  border-radius: 10px;
+  color: var(--oae-error-color);
+  font: 600 0.875rem/1.55 ui-sans-serif, system-ui, sans-serif;
+  margin: 0.75rem 0 0;
+  overflow-wrap: anywhere;
+  padding: 0.875rem 1rem;
+}
+
+.oracle-apex-echarts__fallback[hidden] {
+  display: none;
+}
+
+.oracle-apex-echarts[data-oae-state="error"] .oracle-apex-echarts__canvas {
+  min-block-size: 180px;
+}
+
+@keyframes oae-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 767px) {
+  .oracle-apex-echarts__canvas {
+    min-block-size: var(--oae-mobile-min-height, 300px);
+  }
+}
+
+@media (max-width: 389px) {
+  .oracle-apex-echarts__canvas {
+    min-block-size: var(--oae-narrow-min-height, 280px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oracle-apex-echarts__status::before {
+    animation-duration: 1.8s;
+  }
+}

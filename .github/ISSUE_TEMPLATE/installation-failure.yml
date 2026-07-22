@@ -1,0 +1,25 @@
+name: Installation failure
+description: Report a failure in App Builder or SQLcl installation.
+title: "[Install]: "
+labels: [installation]
+body:
+  - type: dropdown
+    id: method
+    attributes:
+      label: Installation method
+      options: [App Builder plug-in import, SQLcl install.sql, PL/SQL package only, Consumer skill scaffold]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Oracle APEX ECharts version
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Sanitized command and output
+      description: Remove connection strings, application/workspace/schema IDs, users, URLs, and secrets.
+    validations:
+      required: true

@@ -1,0 +1,43 @@
+{
+  "name": "Apache ECharts",
+  "version": "6.1.0",
+  "validationDate": "2026-07-22",
+  "repository": "https://github.com/apache/echarts",
+  "tag": "6.1.0",
+  "gitCommit": "c5a48f5f97d23e5379720870b8444cd05b50ffb4",
+  "sourceRelease": {
+    "archiveFileName": "apache-echarts-6.1.0-src.zip",
+    "url": "https://downloads.apache.org/echarts/6.1.0/apache-echarts-6.1.0-src.zip",
+    "checksumUrl": "https://downloads.apache.org/echarts/6.1.0/apache-echarts-6.1.0-src.zip.sha512",
+    "checksumEntryFileName": "apache-echarts-6.1.0-rc.2-src.zip",
+    "publishedSha512": "f6649b57b76d84d43bedb3577ce51855a41ac0325359360f70a7b7eaf5fedf0fb92dd8179a6b98090b4774bbb50b1acca03f8ad7f94bc3943b973b0277ef036e",
+    "status": "rejected-name-mismatch",
+    "acceptedAsBundleSource": false,
+    "reason": "The official checksum payload names an RC archive instead of the stable archive. The update policy rejects this inconsistency even if bytes happen to match.",
+    "signatureUrl": "https://downloads.apache.org/echarts/6.1.0/apache-echarts-6.1.0-src.zip.asc",
+    "keysUrl": "https://downloads.apache.org/echarts/KEYS"
+  },
+  "npmDistribution": {
+    "metadataUrl": "https://registry.npmjs.org/echarts/6.1.0",
+    "tarballUrl": "https://registry.npmjs.org/echarts/-/echarts-6.1.0.tgz",
+    "integrity": "sha512-q0yaFPggC9FUdsWH4blavRWFmxdrIodbkoKNAjJudAI6CA9gNPxHtV2RcZNEepZVlk4yvBYkOkbk6HIVpIyHZA==",
+    "integrityVerified": true,
+    "bundlePath": "package/dist/echarts.min.js",
+    "bundleMatchedVendoredFile": true
+  },
+  "vendoredBundle": {
+    "path": "echarts-6.1.0.min.js",
+    "sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0",
+    "runtimeRequired": true
+  },
+  "runtimeFiles": [
+    "echarts-6.1.0.min.js",
+    "LICENSE",
+    "NOTICE",
+    "LICENSE-d3",
+    "SOURCE.json",
+    "SHA256SUMS"
+  ],
+  "maintenanceOnlyFiles": ["KEYS"],
+  "license": "Apache-2.0"
+}

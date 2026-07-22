@@ -1,0 +1,10 @@
+node_modules/
+build/
+.cache/
+.DS_Store
+__pycache__/
+*.pyc
+*.tmp
+.env
+.env.*
+reports/upstream-update-*.md

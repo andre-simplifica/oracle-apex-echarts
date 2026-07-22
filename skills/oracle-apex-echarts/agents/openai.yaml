@@ -1,0 +1,4 @@
+interface:
+  display_name: "Oracle APEX ECharts"
+  short_description: "Build secure ECharts integrations for Oracle APEX"
+  default_prompt: "Use $oracle-apex-echarts to build a secure, self-contained Apache ECharts integration for Oracle APEX."

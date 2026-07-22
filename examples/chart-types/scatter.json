@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0",
+  "id": "synthetic_scatter",
+  "requiredRuntime": ">=1.0.0 <2.0.0",
+  "preset": "scatter",
+  "accessibility": {"description": "Synthetic effort and outcome correlation.", "fallbackText": "Points: 2/4, 3/7, 5/9, 8/13.", "emptyText": "No observations."},
+  "data": {"mode": "inline", "contract": "option", "option": {"xAxis": {"type": "value"}, "yAxis": {"type": "value"}, "series": [{"name": "Observations", "type": "scatter", "data": [[2, 4], [3, 7], [5, 9], [8, 13]]}]}}
+}

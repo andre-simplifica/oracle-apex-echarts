@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0",
+  "id": "synthetic_combo",
+  "requiredRuntime": ">=1.0.0 <2.0.0",
+  "preset": "bar_line",
+  "accessibility": {"description": "Synthetic actual versus target values.", "fallbackText": "Actual values are 82, 91, and 95; target is 90.", "emptyText": "No values."},
+  "data": {"mode": "inline", "contract": "option", "option": {"xAxis": {"type": "category"}, "yAxis": {"type": "value"}, "series": [{"name": "Actual", "type": "bar", "data": [["A", 82], ["B", 91], ["C", 95]]}, {"name": "Target", "type": "line", "data": [["A", 90], ["B", 90], ["C", 90]]}]}}
+}

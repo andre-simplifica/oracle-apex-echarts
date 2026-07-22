@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "theme": {
+    "id": "acme-harbor",
+    "name": "Acme Harbor",
+    "version": "1.0.0",
+    "density": "comfortable",
+    "notes": ["Entirely synthetic identity created for this open-source example."]
+  },
+  "source": {
+    "type": "html",
+    "value": "source/brand-reference.html",
+    "extracted_at": "2026-07-22T12:00:00Z",
+    "scope_reviewed": ["Hero", "Color cards", "Typography", "Primary control", "Mobile breakpoint"],
+    "limitations": ["No external font files; system fallbacks only."]
+  },
+  "assets": {
+    "logos": [{"id": "acme-harbor-mark", "source": "source/acme-harbor-mark.svg", "license": "Apache-2.0 project asset", "usage": "Synthetic example only"}],
+    "icons": [],
+    "textures": []
+  },
+  "typography": {
+    "families": {"display": "Inter", "body": "Inter"},
+    "fallbacks": ["system-ui", "Arial", "sans-serif"],
+    "weights": [400, 600, 700, 800],
+    "scale": {"xs": "0.75rem", "sm": "0.875rem", "body": "1rem", "h3": "1.125rem", "h2": "1.5rem", "h1": "2.5rem"},
+    "line_heights": {"compact": 1.15, "body": 1.5}
+  },
+  "colors": {
+    "primitive": {"navy": "#123C69", "mint": "#63C7B2", "ink": "#172033", "white": "#FFFFFF", "slate": "#526079"},
+    "semantic": {"primary": "#123C69", "primary_text": "#FFFFFF", "surface": "#FFFFFF", "text": "#172033", "muted": "#526079", "border": "#D8DEEA", "success": "#067647", "warning": "#B54708", "danger": "#B42318", "danger_text": "#FFFFFF"},
+    "screen": {"page": "#EEF5F7", "surface": "#FFFFFF", "focus": "#326FD1"},
+    "print": {"page": "#FFFFFF", "text": "#172033", "line": "#AAB4C5"}
+  },
+  "layout": {
+    "spacing": {"xs": "4px", "sm": "8px", "md": "16px", "lg": "24px", "xl": "32px"},
+    "borders": {"subtle": "1px solid #D8DEEA", "accent": "4px solid #63C7B2"},
+    "radii": {"control": "9px", "card": "16px", "hero": "24px"},
+    "shadows": {"card": "0 8px 24px rgba(18,60,105,.08)"},
+    "content_width": "1180px",
+    "backgrounds": {"page": "#EEF5F7", "surface": "#FFFFFF", "soft": "#F5F8FB"},
+    "gradients": {"hero": "linear-gradient(135deg,#123C69,#1D5B91)"}
+  },
+  "components": {
+    "header": {"tokens": {"padding": "20px", "background": "#EEF5F7"}, "states": {}},
+    "hero": {"tokens": {"padding": "32px", "background": "linear-gradient(135deg,#123C69,#1D5B91)"}, "states": {}},
+    "brand_band": {"tokens": {"height": "4px", "background": "#63C7B2"}, "states": {}},
+    "footer": {"tokens": {"size": "0.75rem", "color": "#526079"}, "states": {}},
+    "cards": {"tokens": {"radius": "16px", "border": "1px solid #D8DEEA"}, "states": {"hover": {"shadow": "card"}}},
+    "indicators": {"tokens": {"accent_width": "4px", "value_weight": 700}, "states": {}},
+    "tables": {"tokens": {"header_background": "#E8F0F7", "row_height": "40px"}, "states": {"hover": {"background": "#F5F8FB"}}},
+    "buttons": {"tokens": {"radius": "9px", "height": "40px"}, "states": {"hover": {"background": "#1D5B91"}, "focus": {"outline": "3px solid #326FD1"}, "active": {"background": "#0E3055"}, "disabled": {"opacity": 0.55}}},
+    "toolbar": {"tokens": {"gap": "8px", "background": "#FFFFFF"}, "states": {}}
+  },
+  "responsive": {
+    "breakpoints": {"mobile": 480, "tablet": 768, "desktop": 1024},
+    "rules": ["Collapse the identity stack below 640px.", "Allow tables to scroll on screen and expand in print.", "Let toolbar actions wrap and fill available mobile width."]
+  },
+  "accessibility": {
+    "minimum_contrast": 4.5,
+    "focus_visible": true,
+    "reduced_motion": true,
+    "keyboard": true,
+    "observations": ["Primary navy on white and white on navy exceed WCAG AA for normal text."]
+  },
+  "provenance": [
+    {"token": "colors.primitive.navy", "source": "source/brand-reference.html hero and swatch", "license": "Apache-2.0 project asset", "decision": "Use as primary action and identity color."},
+    {"token": "colors.primitive.mint", "source": "source/brand-reference.html hero eyebrow and swatch", "license": "Apache-2.0 project asset", "decision": "Use as positive accent, not body text on white."},
+    {"token": "assets.logos.acme-harbor-mark", "source": "source/acme-harbor-mark.svg", "license": "Apache-2.0 project asset", "decision": "Use original synthetic SVG without approximation."}
+  ]
+}

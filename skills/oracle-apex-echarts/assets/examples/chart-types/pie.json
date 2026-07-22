@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0",
+  "id": "synthetic_pie",
+  "requiredRuntime": ">=1.0.0 <2.0.0",
+  "preset": "pie",
+  "accessibility": {"description": "Synthetic channel composition as a pie.", "fallbackText": "Direct 55, Partner 30, Referral 15.", "emptyText": "No channels."},
+  "data": {"mode": "inline", "contract": "option", "option": {"series": [{"name": "Channel", "type": "pie", "data": [{"name": "Direct", "value": 55}, {"name": "Partner", "value": 30}, {"name": "Referral", "value": 15}]}]}}
+}

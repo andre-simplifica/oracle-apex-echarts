@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0",
+  "id": "synthetic_gauge",
+  "requiredRuntime": ">=1.0.0 <2.0.0",
+  "preset": "gauge",
+  "accessibility": {"description": "Synthetic service level progress.", "fallbackText": "Service level is 86 percent.", "emptyText": "No service level."},
+  "data": {"mode": "inline", "contract": "option", "option": {"series": [{"name": "Service level", "type": "gauge", "data": [{"name": "SLA", "value": 86}]}]}}
+}

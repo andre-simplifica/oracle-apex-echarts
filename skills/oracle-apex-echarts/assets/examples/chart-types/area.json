@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0",
+  "id": "synthetic_area",
+  "requiredRuntime": ">=1.0.0 <2.0.0",
+  "preset": "area",
+  "accessibility": {"description": "Synthetic cumulative volume as an area.", "fallbackText": "Volume: 18, 31, and 47 units.", "emptyText": "No volume."},
+  "data": {"mode": "inline", "contract": "option", "option": {"xAxis": {"type": "category"}, "yAxis": {"type": "value"}, "series": [{"name": "Volume", "type": "line", "areaStyle": {}, "data": [["W1", 18], ["W2", 31], ["W3", 47]]}]}}
+}

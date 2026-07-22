@@ -1,0 +1,12 @@
+Oracle APEX ECharts
+Copyright 2026 oracle-apex-echarts contributors
+
+This product includes Apache ECharts, Copyright The Apache Software Foundation,
+licensed under the Apache License, Version 2.0. See vendor/echarts/NOTICE and
+vendor/echarts/LICENSE for the upstream notices and license.
+
+Oracle and Oracle APEX are trademarks or registered trademarks of Oracle
+Corporation and/or its affiliates. Apache, Apache ECharts, and ECharts are
+trademarks of The Apache Software Foundation. This project is independent and
+is not affiliated with or endorsed by Oracle Corporation or The Apache Software
+Foundation.

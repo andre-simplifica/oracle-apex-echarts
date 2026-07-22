@@ -1,0 +1,66 @@
+plugin:
+  type: "region"
+  internal_name: "COM.SIMPLIFICA.APEX.ECHARTS"
+  display_name: "Apache ECharts for Oracle APEX"
+  version: "1.0.0"
+  api_version: 1
+  render_source: "render.sql"
+  ajax_source: "ajax.sql"
+  standard_attributes:
+    - "SOURCE_SQL"
+    - "AJAX_ITEMS_TO_SUBMIT"
+    - "NO_DATA_FOUND_MESSAGE"
+  files:
+    - "echarts-6.1.0.min.js"
+    - "oracle-apex-echarts.js"
+    - "oracle-apex-echarts.css"
+    - "LICENSE"
+    - "NOTICE"
+    - "LICENSE-d3"
+    - "SOURCE.json"
+    - "SHA256SUMS"
+
+application_attributes:
+  - sequence: 1
+    static_id: "installation_defaults_json"
+    label: "Installation Defaults JSON"
+    type: "TEXTAREA"
+    required: false
+  - sequence: 2
+    static_id: "project_profile_json"
+    label: "Project Profile JSON"
+    type: "TEXTAREA"
+    required: false
+  - sequence: 3
+    static_id: "development_telemetry"
+    label: "Development Telemetry"
+    type: "SELECT LIST"
+    default: "N"
+    values: ["Y", "N"]
+
+component_attributes:
+  - { sequence: 1, static_id: "mode", label: "Mode", type: "SELECT LIST", default: "CHART", values: ["CHART", "RUNTIME_ONLY"] }
+  - { sequence: 2, static_id: "data_contract", label: "Data Contract", type: "SELECT LIST", default: "NORMALIZED_SQL", values: ["NORMALIZED_SQL", "OPTION_JSON"] }
+  - { sequence: 3, static_id: "load_mode", label: "Load Mode", type: "SELECT LIST", default: "INLINE", values: ["INLINE", "AJAX"] }
+  - { sequence: 4, static_id: "preset", label: "Preset", type: "SELECT LIST", default: "BAR_VERTICAL", values: ["BAR_VERTICAL", "BAR_HORIZONTAL", "BAR_STACKED", "LINE", "AREA", "BAR_LINE", "PIE", "DONUT", "GAUGE", "SCATTER", "ADVANCED"] }
+  - { sequence: 5, static_id: "theme", label: "Theme", type: "TEXT", required: false }
+  - { sequence: 6, static_id: "renderer", label: "Renderer", type: "SELECT LIST", default: "CANVAS", values: ["CANVAS", "SVG"] }
+  - { sequence: 7, static_id: "min_height", label: "Minimum Height", type: "INTEGER", default: "320" }
+  - { sequence: 8, static_id: "animation", label: "Animation", type: "YES NO", default: "Y" }
+  - { sequence: 9, static_id: "animation_duration", label: "Animation Duration", type: "INTEGER", default: "500" }
+  - { sequence: 10, static_id: "legend", label: "Legend", type: "SELECT LIST", default: "SHOW", values: ["SHOW", "HIDE"] }
+  - { sequence: 11, static_id: "legend_position", label: "Legend Position", type: "SELECT LIST", default: "AUTO", values: ["AUTO", "TOP", "BOTTOM", "LEFT", "RIGHT"] }
+  - { sequence: 12, static_id: "labels", label: "Labels", type: "SELECT LIST", default: "AUTO", values: ["AUTO", "SHOW", "HIDE"] }
+  - { sequence: 13, static_id: "tooltip", label: "Tooltip", type: "YES NO", default: "Y" }
+  - { sequence: 14, static_id: "zoom", label: "Zoom", type: "YES NO", default: "N" }
+  - { sequence: 15, static_id: "save_as_image", label: "Save as Image", type: "YES NO", default: "N" }
+  - { sequence: 16, static_id: "restore", label: "Restore", type: "YES NO", default: "N" }
+  - { sequence: 17, static_id: "download_filename", label: "Download File Name", type: "TEXT", required: false }
+  - { sequence: 18, static_id: "aria", label: "ARIA", type: "YES NO", default: "Y" }
+  - { sequence: 19, static_id: "aria_description", label: "Accessible Description", type: "TEXTAREA", required: true }
+  - { sequence: 20, static_id: "decal", label: "Decal", type: "YES NO", default: "N" }
+  - { sequence: 21, static_id: "named_formatter", label: "Named Formatter", type: "SELECT LIST", required: false, values: ["INTEGER", "DECIMAL_2", "PERCENT", "CURRENCY_BRL", "SHORT_NUMBER", "DATE_BR", "DATETIME_BR"] }
+  - { sequence: 22, static_id: "refresh_strategy", label: "Refresh Strategy", type: "SELECT LIST", default: "REPLACE", values: ["REPLACE", "MERGE"] }
+  - { sequence: 23, static_id: "empty_message", label: "Empty Message", type: "TEXT", required: false }
+  - { sequence: 24, static_id: "error_message", label: "Error Message", type: "TEXT", required: false }
+  - { sequence: 25, static_id: "chart_spec_overrides_json", label: "ChartSpec Overrides JSON", type: "TEXTAREA", required: false }

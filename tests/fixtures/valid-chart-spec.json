@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.0",
+  "id": "grafico_teste",
+  "requiredRuntime": ">=1.0.0 <2.0.0",
+  "renderer": "canvas",
+  "preset": "line",
+  "size": {
+    "minHeight": 320
+  },
+  "accessibility": {
+    "description": "Série mensal usada exclusivamente como fixture local.",
+    "fallbackText": "Consulte a tabela de valores da fixture.",
+    "emptyText": "Não há valores na fixture.",
+    "essential": true,
+    "decal": false
+  },
+  "behavior": {
+    "animation": true,
+    "animationDuration": 500,
+    "download": false,
+    "zoom": false,
+    "legend": {
+      "show": true,
+      "position": "bottom"
+    },
+    "labels": "auto",
+    "tooltip": true,
+    "aria": true,
+    "formatter": "integer",
+    "clickEvent": true,
+    "selectionEvent": true,
+    "refreshStrategy": "replace"
+  },
+  "data": {
+    "mode": "inline",
+    "contract": "option",
+    "option": {
+      "xAxis": {
+        "type": "category",
+        "data": ["Jan", "Fev", "Mar"]
+      },
+      "yAxis": {
+        "type": "value"
+      },
+      "series": [
+        {
+          "name": "Fixture",
+          "type": "line",
+          "data": [12, 18, 15],
+          "smooth": true
+        }
+      ]
+    }
+  }
+}
