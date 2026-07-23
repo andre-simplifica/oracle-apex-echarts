@@ -23,7 +23,7 @@ declare
 begin
   l_application_id := to_number('&&TARGET_APP_ID');
 
-  select count(*), max(workspace), max(parsing_schema)
+  select count(*), max(workspace), max(owner)
     into l_application_count, l_workspace_name, l_parsing_schema
     from apex_applications
    where application_id = l_application_id;
