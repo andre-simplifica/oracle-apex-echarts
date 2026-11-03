@@ -6,8 +6,9 @@ import vm from "node:vm";
 const here = dirname(fileURLToPath(import.meta.url));
 const runtimeSource = await readFile(resolve(here, "../src/js/oracle-apex-echarts.js"), "utf8");
 
-export function loadRuntime() {
+export function loadRuntime(globals = {}) {
   const context = {
+    ...globals,
     Intl,
     Map,
     Object,

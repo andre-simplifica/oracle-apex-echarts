@@ -25,11 +25,11 @@ Read this document in [Português do Brasil](README.pt-BR.md).
 
 | Component | Version |
 | --- | --- |
-| Oracle APEX ECharts | 1.0.1 |
+| Oracle APEX ECharts | 1.1.0 |
 | Apache ECharts | 6.1.0 |
-| Plug-in | 1.0.0 |
-| `PK_APEX_ECHARTS` | 1.0.0 |
-| Browser runtime | 1.0.0 |
+| Plug-in | 1.1.0 |
+| `PK_APEX_ECHARTS` | 1.1.0 |
+| Browser runtime | 1.1.0 |
 | ChartSpec | 1.0 |
 | Project profile | 1.0 |
 
@@ -59,12 +59,12 @@ submodule is not the default. From a repository checkout, run:
 python3 skills/oracle-apex-echarts/scripts/scaffold_consumer.py \
   --project /path/to/consumer \
   --commit <release-commit-sha> \
-  --ref v1.0.1
+  --ref v1.1.0
 
 python3 skills/oracle-apex-echarts/scripts/scaffold_consumer.py \
   --project /path/to/consumer \
   --commit <release-commit-sha> \
-  --ref v1.0.1 \
+  --ref v1.1.0 \
   --apply
 ```
 

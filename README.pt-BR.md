@@ -15,10 +15,9 @@ incorporado ao `plugin.sql`.
 > afiliado nem endossado pela Oracle Corporation ou pela Apache Software
 > Foundation.
 
-## Versões da release 1.0.1
+## Versões da release 1.1.0
 
-- projeto e skill: `1.0.1`;
-- plugin, package e runtime: `1.0.0`;
+- projeto, skill, plugin, package e runtime: `1.1.0`;
 - Apache ECharts: `6.1.0`;
 - ChartSpec e profile: `1.0`;
 - alvo de validação em repositório: Oracle APEX 24.2 e Oracle Database 26ai.
@@ -34,7 +33,7 @@ Extraia o ZIP da skill e faça primeiro o dry-run:
 python3 oracle-apex-echarts/scripts/scaffold_consumer.py \
   --project /caminho/do/projeto \
   --commit <sha-do-commit-da-release> \
-  --ref v1.0.1
+  --ref v1.1.0
 ```
 
 Revise os caminhos e repita com `--apply`. O padrão de equipe fica em

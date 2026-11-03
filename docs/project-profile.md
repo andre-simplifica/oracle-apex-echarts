@@ -6,6 +6,12 @@ timezone; visual provider/tokens; preferred and allowed chart types;
 integration mode; renderer, animation, labels, legend, and download policy;
 breakpoints and height; warning/hard limits; and empty/error messages.
 
+The browser runtime formats numbers on value axes, tooltips, and numeric bar or
+line labels with the profile locale. When the configured profile has no valid
+locale, it uses the page language that Oracle APEX writes to `<html lang>`, and
+then `en-US`. Text values, such as a label column already formatted by the
+server, are shown as they arrive.
+
 Precedence is security/project rules, explicit task, local profile, Brand
 Report Kit tokens, then neutral profile. The compiler outputs only chart tokens
 from Brand Report Kit and never copies logos or document identity.

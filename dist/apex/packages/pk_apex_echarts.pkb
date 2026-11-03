@@ -1122,7 +1122,7 @@ CREATE OR REPLACE EDITIONABLE PACKAGE BODY "PK_APEX_ECHARTS" as
     apex_javascript.add_library(
       p_name      => 'oracle-apex-echarts',
       p_directory => p_plugin.file_prefix,
-      p_key       => 'com.simplifica.apex.echarts:runtime:1.0.0'
+      p_key       => 'com.simplifica.apex.echarts:runtime:1.1.0'
     );
     apex_css.add_file(
       p_name      => 'oracle-apex-echarts',

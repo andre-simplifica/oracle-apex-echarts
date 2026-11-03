@@ -1,7 +1,7 @@
 # Installation, upgrade, and team distribution
 
 Prefer the tagged public release at
-`https://github.com/andre-simplifica/oracle-apex-echarts/releases/tag/v1.0.1`
+`https://github.com/andre-simplifica/oracle-apex-echarts/releases/tag/v1.1.0`
 and verify its external `SHA256SUMS`. In a linked skill, the self-contained
 repository-only distribution is `assets/apex-distribution/`.
 
