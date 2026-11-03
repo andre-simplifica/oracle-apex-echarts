@@ -6,7 +6,7 @@ define TARGET_APP_ID = '&1'
 
 prompt [1/5] Validating workspace, application, parsing schema, and installed versions...
 declare
-  c_target_version constant varchar2(20) := '1.0.0';
+  c_target_version constant varchar2(20) := '1.1.0';
   l_application_id number;
   l_workspace_id   number;
   l_workspace_name varchar2(255);
@@ -141,8 +141,8 @@ begin
    where application_id = to_number('&&TARGET_APP_ID')
      and name = 'COM.SIMPLIFICA.APEX.ECHARTS'
      and display_name = 'Apache ECharts for Oracle APEX'
-     and version_identifier = '1.0.0'
-     and files_version = 1;
+     and version_identifier = '1.1.0'
+     and files_version = 2;
 
   select count(distinct file_name)
     into l_file_count
@@ -170,7 +170,7 @@ begin
   if l_plugin_count <> 1
      or l_file_count <> 8
      or l_total_file_count <> 8
-     or l_package_version <> '1.0.0'
+     or l_package_version <> '1.1.0'
   then
     raise_application_error(-20988, 'Post-installation validation failed. Roll back and review the installation log.');
   end if;
@@ -178,5 +178,5 @@ end;
 /
 
 commit;
-prompt Oracle APEX ECharts 1.0.0 installed successfully. No pages or regions were created.
+prompt Oracle APEX ECharts 1.1.0 installed successfully. No pages or regions were created.
 exit success

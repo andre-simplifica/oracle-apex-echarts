@@ -83,13 +83,13 @@ begin
   if l_plugin_count = 0 and l_spec_status is null and l_body_status is null then
     l_state := 'ABSENT';
   elsif l_plugin_count = 1
-        and l_plugin_version = '1.0.0'
-        and l_files_version = 1
+        and l_plugin_version = '1.1.0'
+        and l_files_version = 2
         and l_file_count = 8
         and l_expected_file_count = 8
         and l_spec_status = 'VALID'
         and l_body_status = 'VALID'
-        and l_package_version = '1.0.0'
+        and l_package_version = '1.1.0'
         and l_error_count = 0
   then
     l_state := 'COMPATIBLE';

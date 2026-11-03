@@ -1,6 +1,6 @@
 {
   "name": "@andre-simplifica/oracle-apex-echarts",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Self-contained Apache ECharts runtime, Oracle APEX plug-in, PL/SQL API, and reusable agent skill.",
   "type": "module",
   "private": false,

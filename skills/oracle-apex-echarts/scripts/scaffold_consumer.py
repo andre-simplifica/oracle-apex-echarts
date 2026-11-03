@@ -44,7 +44,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, required=True)
     parser.add_argument("--commit", required=True, help="verified 40-character upstream commit")
-    parser.add_argument("--ref", default="v1.0.1", help="tracking tag or commit")
+    parser.add_argument("--ref", default="v1.1.0", help="tracking tag or commit")
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
     try:

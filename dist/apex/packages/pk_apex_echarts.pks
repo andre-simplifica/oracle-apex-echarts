@@ -4,9 +4,9 @@ CREATE OR REPLACE EDITIONABLE PACKAGE "PK_APEX_ECHARTS" authid definer as
    * Keep domain SQL, metrics, filters, and authorization in consumer packages.
    */
 
-  c_package_version constant varchar2(20) := '1.0.0';
-  c_plugin_version  constant varchar2(20) := '1.0.0';
-  c_runtime_version constant varchar2(20) := '1.0.0';
+  c_package_version constant varchar2(20) := '1.1.0';
+  c_plugin_version  constant varchar2(20) := '1.1.0';
+  c_runtime_version constant varchar2(20) := '1.1.0';
   c_schema_version  constant varchar2(10) := '1.0';
   c_echarts_version constant varchar2(20) := '6.1.0';
 

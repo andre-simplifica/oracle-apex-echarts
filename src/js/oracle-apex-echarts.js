@@ -1,7 +1,7 @@
 (function attachOracleApexECharts(root, factory) {
   "use strict";
 
-  if (root.OracleApexECharts?.version === "1.0.0") {
+  if (root.OracleApexECharts?.version === "1.1.0") {
     if (typeof module === "object" && module.exports) {
       module.exports = root.OracleApexECharts;
     }
@@ -17,7 +17,7 @@
 })(typeof globalThis === "object" ? globalThis : window, function createRuntime(root) {
   "use strict";
 
-  const VERSION = "1.0.0";
+  const VERSION = "1.1.0";
   const SCHEMA_VERSION = "1.0";
   const REQUIRED_RUNTIME = ">=1.0.0 <2.0.0";
   const ECHARTS_VERSION = "6.1.0";
@@ -296,8 +296,25 @@
       ?? {};
   }
 
+  function canonicalLocale(language) {
+    if (typeof language !== "string" || language.trim() === "") {
+      return null;
+    }
+    try {
+      const [tag] = Intl.getCanonicalLocales(language.trim());
+      return tag && Intl.NumberFormat.supportedLocalesOf([tag]).length > 0 ? tag : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  // The profile locale wins. Without it, or when it is not a valid supported
+  // language tag (such as "pt_BR" or "zz"), the page language set by Oracle APEX
+  // applies. An invalid tag would make Intl throw while the chart is drawn.
   function projectLocale() {
-    return runtimeConfiguration.projectProfile.project?.locale ?? "en-US";
+    return canonicalLocale(runtimeConfiguration.projectProfile.project?.locale)
+      ?? canonicalLocale(root.document?.documentElement?.lang)
+      ?? "en-US";
   }
 
   function projectTimeZone() {
@@ -701,6 +718,130 @@
     datetime_br: (value) => new Intl.DateTimeFormat(projectLocale(), { dateStyle: "short", timeStyle: "short", timeZone: projectTimeZone() }).format(new Date(value))
   });
 
+  // ECharts writes 1,299 on axes and tooltips and the raw 1299 on labels in every
+  // locale. These formatters belong to the runtime (server options still cannot
+  // carry a formatter) and use the project locale with the value's own decimals.
+  const numberFormats = new Map();
+
+  function formatNumber(value) {
+    const number = Number(value);
+    const [digits, exponent] = String(Math.abs(number)).split("e");
+    const decimals = Math.min(20, Math.max(0, (digits.split(".")[1]?.length ?? 0) - Number(exponent ?? 0)));
+    const locale = projectLocale();
+    const key = `${locale}|${decimals}`;
+    if (!numberFormats.has(key)) {
+      numberFormats.set(key, new Intl.NumberFormat(locale, { maximumFractionDigits: decimals }));
+    }
+    return numberFormats.get(key).format(number);
+  }
+
+  // Mirrors the default ECharts tooltip value in the project locale. Only numbers
+  // are formatted; text is kept as is because it may already be localized
+  // (a pt-BR "7.095" from a label column would otherwise become 7,095).
+  function readableValue(value) {
+    if (Array.isArray(value)) {
+      return value.map(readableValue);
+    }
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return formatNumber(value);
+    }
+    if (typeof value === "string" && value.trim() !== "") {
+      return value;
+    }
+    return typeof value === "boolean" ? String(value) : "-";
+  }
+
+  function componentList(value) {
+    return (Array.isArray(value) ? value : [value]).filter(isPlainObject);
+  }
+
+  // Same default as ECharts for an axis without type: category with data, value without.
+  function axisType(axis) {
+    return axis.type || (axis.data ? "category" : "value");
+  }
+
+  function cartesianAxes(option) {
+    return [...componentList(option.xAxis), ...componentList(option.yAxis)];
+  }
+
+  function isValueAxis(axis) {
+    return axis !== undefined && ["value", "log"].includes(axisType(axis));
+  }
+
+  // With a time axis, the tooltip receives the time value when no value or log
+  // axis exists (ECharts then shows every dimension, as in a time x category
+  // schedule) or when a series picks its label dimension through encode. Those
+  // charts keep the ECharts date formatting.
+  function tooltipMayShowTime(option) {
+    const axes = cartesianAxes(option);
+    return axes.some((axis) => axis.type === "time")
+      && (!axes.some(isValueAxis)
+        || componentList(option.series).some((series) => series.encode?.label !== undefined));
+  }
+
+  function isNumericItem(item) {
+    const value = isPlainObject(item) ? item.value : item;
+    return value === null || value === undefined || value === "-" || (typeof value === "number" && Number.isFinite(value));
+  }
+
+  function isArrayItem(item) {
+    const value = isPlainObject(item) ? item.value : item;
+    return value === null || value === undefined || value === "-" || (Array.isArray(value) && value.length >= 2);
+  }
+
+  // Index of the value-axis dimension in [x, y] items, where ECharts takes its
+  // default label: y first, then x. Null when the series is not on two
+  // cartesian axes with a value or log axis.
+  function valueDimension(option, series) {
+    if (series.coordinateSystem !== undefined && series.coordinateSystem !== "cartesian2d") {
+      return null;
+    }
+    const xAxis = componentList(option.xAxis)[series.xAxisIndex ?? 0];
+    const yAxis = componentList(option.yAxis)[series.yAxisIndex ?? 0];
+    if (xAxis === undefined || yAxis === undefined) {
+      return null;
+    }
+    if (isValueAxis(yAxis)) {
+      return 1;
+    }
+    return isValueAxis(xAxis) ? 0 : null;
+  }
+
+  function localizeNumbers(option) {
+    // ECharts only skips crowded labels on category axes. Level value-axis labels
+    // that would touch their neighbors are hidden through hideOverlap.
+    for (const axis of cartesianAxes(option)) {
+      if (isValueAxis(axis)) {
+        axis.axisLabel = { hideOverlap: true, ...axis.axisLabel };
+        if (axis.axisLabel.formatter === undefined) {
+          axis.axisLabel.formatter = formatNumber;
+        }
+      }
+    }
+    // Bar and line labels: plain numbers, or [x, y] items such as the ones
+    // PK_APEX_ECHARTS generates, where only the value-axis dimension is shown.
+    // Series with encode or a dataset keep the ECharts default label.
+    for (const series of componentList(option.series)) {
+      if (!["bar", "line"].includes(series.type)
+        || series.encode !== undefined
+        || !Array.isArray(series.data)
+        || series.label?.formatter !== undefined) {
+        continue;
+      }
+      if (series.data.every(isNumericItem)) {
+        series.label = { ...series.label, formatter: (parameters) => readableValue(parameters.value) };
+        continue;
+      }
+      const dimension = valueDimension(option, series);
+      if (dimension !== null && series.data.every(isArrayItem)) {
+        series.label = {
+          ...series.label,
+          formatter: (parameters) => readableValue(Array.isArray(parameters.value) ? parameters.value[dimension] : parameters.value)
+        };
+      }
+    }
+  }
+
   function legendPosition(position) {
     switch (position) {
       case "top": return { top: 0, left: "center" };
@@ -725,15 +866,20 @@
     if (!hasCartesianAxes) {
       return [];
     }
+    // Axis labels stay level on narrow charts; labels that do not fit are hidden
+    // (category-axis interval, hideOverlap on value axes).
     const mobileOption = {
       toolbox: { orient: "horizontal", right: 4, top: 4 }
     };
-    mobileOption.grid = { left: 44, right: 18, top: 48, bottom: 54, containLabel: true };
-    mobileOption.xAxis = { axisLabel: { rotate: 30 } };
     const narrowOption = {
-      grid: { left: 36, right: 12, top: 44, bottom: 46, containLabel: true },
       toolbox: { show: false }
     };
+    // A grid defined by the chart applies at every width: it reserves room for
+    // value labels beside bars, which containLabel does not measure.
+    if (option.grid === undefined) {
+      mobileOption.grid = { left: 44, right: 18, top: 48, bottom: 54, containLabel: true };
+      narrowOption.grid = { left: 36, right: 12, top: 44, bottom: 46, containLabel: true };
+    }
     const media = [
       {
         query: { maxWidth: 767 },
@@ -781,7 +927,10 @@
     });
     if (behavior.formatter) {
       option.tooltip.valueFormatter = formatters[behavior.formatter];
+    } else if (!tooltipMayShowTime(option)) {
+      option.tooltip.valueFormatter = readableValue;
     }
+    localizeNumbers(option);
 
     const position = behavior.legend?.position ?? defaults.legendPosition;
     option.legend = mergeConfiguration(option.legend, legendPosition(position), {

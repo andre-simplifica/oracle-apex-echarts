@@ -64,7 +64,7 @@ async function fetchResponse(url, optional = false) {
     try {
       const response = await fetch(url, {
         redirect: "follow",
-        headers: { "user-agent": "oracle-apex-echarts-updater/1.0.1" },
+        headers: { "user-agent": "oracle-apex-echarts-updater/1.1.0" },
         signal: AbortSignal.timeout(15000)
       });
       if (optional && response.status === 404) return null;

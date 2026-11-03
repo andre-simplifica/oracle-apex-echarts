@@ -55,9 +55,9 @@ begin
 
   if l_package_status <> 'VALID'
      or l_body_status <> 'VALID'
-     or l_package_version <> '1.0.0'
-     or l_plugin_version <> '1.0.0'
-     or l_files_version <> 1
+     or l_package_version <> '1.1.0'
+     or l_plugin_version <> '1.1.0'
+     or l_files_version <> 2
      or l_file_count <> 8
      or l_expected_file_count <> 8
   then
