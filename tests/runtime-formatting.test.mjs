@@ -4,10 +4,21 @@ import { loadRuntime } from "./load-runtime.mjs";
 
 // Synthetic options only. Each runtime gets its own context, so the page
 // language and profile of one test never leak into another.
-function runtimeFor(lang, profile) {
-  const runtime = loadRuntime(lang === undefined ? {} : { document: { documentElement: { lang } } });
+function runtimeFor(lang, profile, globals = {}) {
+  const runtime = loadRuntime({ ...(lang === undefined ? {} : { document: { documentElement: { lang } } }), ...globals });
   if (profile) runtime.configure({ projectProfile: profile });
   return runtime;
+}
+
+// Records the locale passed to Intl.NumberFormat, so the en-US fallback cannot
+// pass by accident on a machine whose default locale is already en-US.
+function recordingIntl(locales) {
+  function NumberFormat(locale, options) {
+    locales.push(locale);
+    return new Intl.NumberFormat(locale, options);
+  }
+  NumberFormat.supportedLocalesOf = (tags) => Intl.NumberFormat.supportedLocalesOf(tags);
+  return { ...Object.fromEntries(Object.getOwnPropertyNames(Intl).map((name) => [name, Intl[name]])), NumberFormat };
 }
 
 function spec(option, extra = {}) {
@@ -49,8 +60,18 @@ describe("locale-aware numbers", () => {
 
   test("keeps the decimals of each value", () => {
     const option = runtimeFor("pt-br").compileOption(spec(columns()));
-    expect([0.25, 2.5, 1234567.891].map((value) => option.yAxis.axisLabel.formatter(value)))
-      .toEqual(["0,25", "2,5", "1.234.567,891"]);
+    expect([0.25, 2.5, 1234567.891, 1.5e-7].map((value) => option.yAxis.axisLabel.formatter(value)))
+      .toEqual(["0,25", "2,5", "1.234.567,891", "0,00000015"]);
+  });
+
+  test("formats log axes and keeps gaps in numeric series", () => {
+    const option = runtimeFor("pt-br").compileOption(spec({
+      xAxis: { type: "category", data: ["A", "B", "C"] },
+      yAxis: { type: "log" },
+      series: [{ type: "line", label: { show: true }, data: [1299, null, "-"] }]
+    }));
+    expect(option.yAxis.axisLabel.formatter(10000)).toBe("10.000");
+    expect(option.series[0].label.formatter({ value: 1299 })).toBe("1.299");
   });
 
   test("lets the profile locale win over the page language", () => {
@@ -67,8 +88,16 @@ describe("locale-aware numbers", () => {
   });
 
   test("uses en-US without a valid page language or profile locale", () => {
-    expect(runtimeFor(undefined).compileOption(spec(columns())).yAxis.axisLabel.formatter(1200)).toBe("1,200");
+    const locales = [];
+    const option = runtimeFor(undefined, undefined, { Intl: recordingIntl(locales) }).compileOption(spec(columns()));
+    expect(option.yAxis.axisLabel.formatter(1200)).toBe("1,200");
+    expect(locales).toEqual(["en-US"]);
     expect(runtimeFor("pt_br invalid").compileOption(spec(columns())).yAxis.axisLabel.formatter(1200)).toBe("1,200");
+  });
+
+  test("ignores a well-formed but unsupported profile locale", () => {
+    const option = runtimeFor("pt-br", { project: { locale: "zz" } }).compileOption(spec(columns()));
+    expect(option.yAxis.axisLabel.formatter(1200)).toBe("1.200");
   });
 
   test("keeps a registered behavior formatter ahead of the default tooltip", () => {
@@ -90,8 +119,36 @@ describe("locale-aware numbers", () => {
       series: [{ type: "bar", label: { show: true }, encode: { x: 0, y: 1, label: 2 }, data: [[1055, "Groups", "1.055"]] }]
     }));
     expect(encoded.series[0].label.formatter).toBeUndefined();
+    const scalarEncoded = runtime.compileOption(spec({
+      xAxis: { type: "category", data: ["A"] },
+      yAxis: { type: "value" },
+      series: [{ type: "bar", label: { show: true }, encode: { y: 0 }, data: [1299] }]
+    }));
+    expect(scalarEncoded.series[0].label.formatter).toBeUndefined();
     const pie = runtime.compileOption(spec({ series: [{ type: "pie", label: { show: true }, data: [{ name: "A", value: 1299 }] }] }));
     expect(pie.series[0].label.formatter).toBeUndefined();
+    const categories = runtime.compileOption(spec({
+      xAxis: { type: "category" },
+      yAxis: { type: "category" },
+      series: [{ type: "line", label: { show: true }, data: [["A", "B"]] }]
+    }));
+    expect(categories.series[0].label.formatter).toBeUndefined();
+  });
+
+  test("labels the value-axis dimension of [x, y] items like the package presets", () => {
+    const runtime = runtimeFor("pt-br");
+    const vertical = runtime.compileOption(spec({
+      xAxis: { type: "category" },
+      yAxis: { type: "value" },
+      series: [{ type: "bar", label: { show: true }, data: [{ value: ["Jan", 1299] }, ["Feb", 376], null] }]
+    }));
+    expect(vertical.series[0].label.formatter({ value: ["Jan", 1299] })).toBe("1.299");
+    const horizontal = runtime.compileOption(spec({
+      xAxis: { type: "value" },
+      yAxis: { type: "category" },
+      series: [{ type: "bar", label: { show: true }, data: [[7095, "A"]] }]
+    }));
+    expect(horizontal.series[0].label.formatter({ value: [7095, "A"] })).toBe("7.095");
   });
 
   test("infers axis types like ECharts when the option omits them", () => {
@@ -104,7 +161,7 @@ describe("locale-aware numbers", () => {
     expect(option.yAxis.axisLabel).toBeUndefined();
   });
 
-  test("formats time-axis tooltips unless a series picks dimensions through encode", () => {
+  test("formats time-axis charts whose tooltip shows the value dimension", () => {
     const runtime = runtimeFor("pt-br");
     const plain = runtime.compileOption(spec({
       xAxis: { type: "time" },
@@ -112,13 +169,29 @@ describe("locale-aware numbers", () => {
       series: [{ type: "line", label: { show: true }, data: [[1762128000000, 1299]] }]
     }));
     expect(plain.tooltip.valueFormatter(1299)).toBe("1.299");
-    expect(plain.series[0].label.formatter).toBeUndefined();
+    expect(plain.series[0].label.formatter({ value: [1762128000000, 1299] })).toBe("1.299");
     const encoded = runtime.compileOption(spec({
       xAxis: { type: "time" },
-      yAxis: {},
-      series: [{ type: "line", encode: { x: 0, y: 1 }, data: [[1762128000000, 5]] }]
+      yAxis: { type: "value" },
+      series: [{ type: "line", encode: { x: 0, y: 1 }, data: [[1762128000000, 2450.5]] }]
     }));
-    expect(encoded.tooltip.valueFormatter).toBeUndefined();
+    expect(encoded.tooltip.valueFormatter(2450.5)).toBe("2.450,5");
+  });
+
+  test("keeps ECharts dates in tooltips that can receive the time value", () => {
+    const runtime = runtimeFor("pt-br");
+    const schedule = runtime.compileOption(spec({
+      xAxis: { type: "time" },
+      yAxis: { type: "category" },
+      series: [{ type: "scatter", data: [[1762128000000, "Task A"]] }]
+    }));
+    expect(schedule.tooltip.valueFormatter).toBeUndefined();
+    const labelled = runtime.compileOption(spec({
+      xAxis: { type: "time" },
+      yAxis: { type: "value" },
+      series: [{ type: "line", encode: { x: 0, y: 1, label: 0 }, data: [[1762128000000, 5]] }]
+    }));
+    expect(labelled.tooltip.valueFormatter).toBeUndefined();
   });
 });
 

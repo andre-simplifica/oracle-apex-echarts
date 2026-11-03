@@ -301,15 +301,16 @@
       return null;
     }
     try {
-      return Intl.getCanonicalLocales(language.trim())[0] ?? null;
+      const [tag] = Intl.getCanonicalLocales(language.trim());
+      return tag && Intl.NumberFormat.supportedLocalesOf([tag]).length > 0 ? tag : null;
     } catch (error) {
       return null;
     }
   }
 
-  // The profile locale wins. Without it, or when it is not a valid language tag
-  // (such as "pt_BR"), the page language set by Oracle APEX applies. An invalid
-  // tag would make Intl throw while the chart is drawn.
+  // The profile locale wins. Without it, or when it is not a valid supported
+  // language tag (such as "pt_BR" or "zz"), the page language set by Oracle APEX
+  // applies. An invalid tag would make Intl throw while the chart is drawn.
   function projectLocale() {
     return canonicalLocale(runtimeConfiguration.projectProfile.project?.locale)
       ?? canonicalLocale(root.document?.documentElement?.lang)
@@ -717,9 +718,9 @@
     datetime_br: (value) => new Intl.DateTimeFormat(projectLocale(), { dateStyle: "short", timeStyle: "short", timeZone: projectTimeZone() }).format(new Date(value))
   });
 
-  // ECharts writes 1,299 on axes, tooltips, and labels in every locale. These
-  // formatters belong to the runtime (server options still cannot carry a
-  // formatter) and use the project locale with the value's own decimals.
+  // ECharts writes 1,299 on axes and tooltips and the raw 1299 on labels in every
+  // locale. These formatters belong to the runtime (server options still cannot
+  // carry a formatter) and use the project locale with the value's own decimals.
   const numberFormats = new Map();
 
   function formatNumber(value) {
@@ -763,11 +764,19 @@
     return [...componentList(option.xAxis), ...componentList(option.yAxis)];
   }
 
-  // On a time axis, the tooltip only receives the time value when a series picks
-  // its dimensions through encode; that case keeps the ECharts date formatting.
+  function isValueAxis(axis) {
+    return axis !== undefined && ["value", "log"].includes(axisType(axis));
+  }
+
+  // With a time axis, the tooltip receives the time value when no value or log
+  // axis exists (ECharts then shows every dimension, as in a time x category
+  // schedule) or when a series picks its label dimension through encode. Those
+  // charts keep the ECharts date formatting.
   function tooltipMayShowTime(option) {
-    return cartesianAxes(option).some((axis) => axis.type === "time")
-      && componentList(option.series).some((series) => series.encode !== undefined);
+    const axes = cartesianAxes(option);
+    return axes.some((axis) => axis.type === "time")
+      && (!axes.some(isValueAxis)
+        || componentList(option.series).some((series) => series.encode?.label !== undefined));
   }
 
   function isNumericItem(item) {
@@ -775,24 +784,60 @@
     return value === null || value === undefined || value === "-" || (typeof value === "number" && Number.isFinite(value));
   }
 
+  function isArrayItem(item) {
+    const value = isPlainObject(item) ? item.value : item;
+    return value === null || value === undefined || value === "-" || (Array.isArray(value) && value.length >= 2);
+  }
+
+  // Index of the value-axis dimension in [x, y] items, where ECharts takes its
+  // default label: y first, then x. Null when the series is not on two
+  // cartesian axes with a value or log axis.
+  function valueDimension(option, series) {
+    if (series.coordinateSystem !== undefined && series.coordinateSystem !== "cartesian2d") {
+      return null;
+    }
+    const xAxis = componentList(option.xAxis)[series.xAxisIndex ?? 0];
+    const yAxis = componentList(option.yAxis)[series.yAxisIndex ?? 0];
+    if (xAxis === undefined || yAxis === undefined) {
+      return null;
+    }
+    if (isValueAxis(yAxis)) {
+      return 1;
+    }
+    return isValueAxis(xAxis) ? 0 : null;
+  }
+
   function localizeNumbers(option) {
     // ECharts only skips crowded labels on category axes. Level value-axis labels
     // that would touch their neighbors are hidden through hideOverlap.
     for (const axis of cartesianAxes(option)) {
-      if (["value", "log"].includes(axisType(axis))) {
+      if (isValueAxis(axis)) {
         axis.axisLabel = { hideOverlap: true, ...axis.axisLabel };
         if (axis.axisLabel.formatter === undefined) {
           axis.axisLabel.formatter = formatNumber;
         }
       }
     }
+    // Bar and line labels: plain numbers, or [x, y] items such as the ones
+    // PK_APEX_ECHARTS generates, where only the value-axis dimension is shown.
+    // Series with encode or a dataset keep the ECharts default label.
     for (const series of componentList(option.series)) {
-      if (["bar", "line"].includes(series.type)
-        && series.encode === undefined
-        && Array.isArray(series.data)
-        && series.data.every(isNumericItem)
-        && series.label?.formatter === undefined) {
+      if (!["bar", "line"].includes(series.type)
+        || series.encode !== undefined
+        || !Array.isArray(series.data)
+        || series.label?.formatter !== undefined) {
+        continue;
+      }
+      if (series.data.every(isNumericItem)) {
         series.label = { ...series.label, formatter: (parameters) => readableValue(parameters.value) };
+        continue;
+      }
+      const dimension = valueDimension(option, series);
+      if (dimension !== null && series.data.every(isArrayItem)) {
+        series.label = {
+          ...series.label,
+          formatter: (parameters) => readableValue(Array.isArray(parameters.value) ? parameters.value[dimension] : parameters.value)
+        };
       }
     }
   }

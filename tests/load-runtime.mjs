@@ -6,9 +6,10 @@ import vm from "node:vm";
 const here = dirname(fileURLToPath(import.meta.url));
 const runtimeSource = await readFile(resolve(here, "../src/js/oracle-apex-echarts.js"), "utf8");
 
+// Extra globals let a test set document.documentElement.lang or observe Intl;
+// globalThis and window always point back to the sandbox.
 export function loadRuntime(globals = {}) {
   const context = {
-    ...globals,
     Intl,
     Map,
     Object,
@@ -22,7 +23,8 @@ export function loadRuntime(globals = {}) {
     },
     module: { exports: {} },
     performance,
-    window: null
+    window: null,
+    ...globals
   };
   context.globalThis = context;
   context.window = context;

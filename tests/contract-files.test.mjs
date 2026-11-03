@@ -205,4 +205,13 @@ describe("repository contracts", () => {
     assert.deepEqual(compatibility.oracleApex.runtimeValidated, []);
     assert.deepEqual(compatibility.browsers.runtimeValidated, []);
   });
+
+  test("tracks the current release tag in the scaffold and the bug template", async () => {
+    const compatibility = JSON.parse(await text("compatibility.json"));
+    const scaffold = await text("skills/oracle-apex-echarts/scripts/scaffold_consumer.py");
+    assert.match(scaffold, new RegExp(`"--ref", default="v${compatibility.project.replaceAll(".", "\\.")}"`));
+    const bugTemplate = await text(".github/ISSUE_TEMPLATE/bug.yml");
+    assert.match(bugTemplate, new RegExp(`Oracle APEX ECharts ${compatibility.project.replaceAll(".", "\\.")},`));
+    assert.ok(await text(`docs/releases/${compatibility.project}.md`));
+  });
 });
